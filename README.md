@@ -56,3 +56,25 @@ Creativity is also encouraged, and while we do not expect you to add a lot more 
 - We will ask clarifying questions about your code and your design choices.
 - In addition to the presentation we will ask you to refactor the code, add features, or fix bugs:
   please be prepared to share your screen during the interview and to code live with us.
+
+# TODO:
+
+## Backend:
+
+1. Map suppliers
+2. Add pagination
+3. Add search
+4. Add /activity/{id} endpoint
+5. Refactoring, update /debug endpoint
+
+## Frontend:
+
+1. Create markup (Framework?)
+2. Add Loader/Skeleton
+3. Add search/filter + Debouncer + check search input for copy/paste func
+4. Fix Race conditions (Abort/Select last/Cancel Token)
+5. Add Pagination
+6. Add routing with /activity/{id} route
+7. Refactoring (services, etc...)
+
+## Documentation/Comments
