@@ -1,6 +1,5 @@
 package com.getyourguide.demo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -10,12 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Activity {
+public class ActivityWithSupplier {
     private Long id;
     private String title;
     private int price;
     private String currency;
     private double rating;
     private boolean specialOffer;
-    private Long supplierId; // Add supplierId
+    private Supplier supplier;
 }
