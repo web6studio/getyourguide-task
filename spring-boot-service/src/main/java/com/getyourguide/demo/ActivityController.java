@@ -19,21 +19,22 @@ public class ActivityController {
     }
 
     @GetMapping("/debug")
-    public void debug(@RequestParam(name = "title", required = false, defaultValue = "NONE") String title,
+    public void debug(@RequestParam(name = "title", required = false, defaultValue = "") String title,
                       @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
                       @RequestParam(name = "limit", required = false, defaultValue = "1000") int limit, 
                       Model model) {
-        // Read activities from jsonDataLoader service
-        List<ActivityWithSupplier> activities = jsonDataLoader.getActivities(offset, limit);
+        // Read activities with filtering and pagination
+        List<ActivityWithSupplier> activities = jsonDataLoader.getActivities(title, offset, limit);
         model.addAttribute("title", title);
         model.addAttribute("activities", activities);
     }
 
     @GetMapping("/activities")
     public ResponseEntity<List<ActivityWithSupplier>> activities(
+            @RequestParam(name = "title", required = false, defaultValue = "") String title,
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = "1000") int limit) {
-        // Return activities using offset and limit
-        return ResponseEntity.ok(jsonDataLoader.getActivities(offset, limit));
+        // Return filtered and paginated activities
+        return ResponseEntity.ok(jsonDataLoader.getActivities(title, offset, limit));
     }
 }

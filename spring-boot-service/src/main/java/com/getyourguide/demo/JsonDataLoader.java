@@ -29,14 +29,14 @@ public class JsonDataLoader {
             Map<Long, Supplier> supplierMap = suppliers.stream()
                     .collect(Collectors.toMap(Supplier::getId, s -> s));
 
-            // Read the JSON file and convert it into a list of activities for parsing
+            // Read the JSON file and convert it into a list of activities
             var activitiesInput = new ClassPathResource("static/activities.json").getInputStream();
             List<Activity> activitiesWithSupplier = objectMapper.readValue(activitiesInput, new TypeReference<List<Activity>>() {});
 
-            // Convert to ActivityWithSupplier with the required nested suppliers
+            // Convert to ActivityWithSupplier with nested suppliers
             activities = activitiesWithSupplier.stream().map(activity -> {
                 Supplier supplier = supplierMap.get(activity.getSupplierId());
-                ActivityWithSupplier activityWithSupplier = new ActivityWithSupplier(
+                return new ActivityWithSupplier(
                         activity.getId(),
                         activity.getTitle(),
                         activity.getPrice(),
@@ -45,7 +45,6 @@ public class JsonDataLoader {
                         activity.isSpecialOffer(),
                         supplier
                 );
-                return activityWithSupplier;
             }).collect(Collectors.toList());
 
         } catch (IOException e) {
@@ -53,10 +52,17 @@ public class JsonDataLoader {
         }
     }
 
-    public List<ActivityWithSupplier> getActivities(int offset, int limit) {
+    public List<ActivityWithSupplier> getActivities(String title, int offset, int limit) {
+        // Filter activities by title if provided
+        // In real life the filter is completed on the DB side with LIKE/ILIKE (PostgreSQL)
+        List<ActivityWithSupplier> filteredActivities = activities.stream()
+            .filter(activity -> title == null || title.trim().isEmpty() || 
+                    activity.getTitle().toLowerCase().contains(title.trim().toLowerCase()))
+            .collect(Collectors.toList());
+
+        // Apply pagination
         // In real life the pagination is completed on the DB side with LIMIT and OFFSET
-        int endIndex = Math.min(offset + limit, activities.size());
-        List<ActivityWithSupplier> paginatedActivities = activities.subList(offset, endIndex);
-        return paginatedActivities;
+        int endIndex = Math.min(offset + limit, filteredActivities.size());
+        return filteredActivities.subList(offset, endIndex);
     }
 }

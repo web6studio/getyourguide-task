@@ -61,11 +61,11 @@ Creativity is also encouraged, and while we do not expect you to add a lot more 
 
 ## Backend:
 
-1. Map suppliers
-2. Add pagination
-3. Add search
+1. Map suppliers ✔
+2. Add pagination ✔
+3. Add search ✔
 4. Add /activity/{id} endpoint
-5. Refactoring, update /debug endpoint
+5. Refactoring, update /debug endpoint ✔
 
 ## Frontend:
 
