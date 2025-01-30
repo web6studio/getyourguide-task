@@ -65,4 +65,11 @@ public class JsonDataLoader {
         int endIndex = Math.min(offset + limit, filteredActivities.size());
         return filteredActivities.subList(offset, endIndex);
     }
+
+    public ActivityWithSupplier getActivityById(long id) {
+        return activities.stream()
+                .filter(activity -> activity.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
 }

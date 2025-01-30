@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -36,5 +37,14 @@ public class ActivityController {
             @RequestParam(name = "limit", required = false, defaultValue = "1000") int limit) {
         // Return filtered and paginated activities
         return ResponseEntity.ok(jsonDataLoader.getActivities(title, offset, limit));
+    }
+
+    @GetMapping("/activity/{id}")
+    public ResponseEntity<ActivityWithSupplier> getActivityById(@PathVariable long id) {
+        ActivityWithSupplier activity = jsonDataLoader.getActivityById(id);
+        if (activity == null) {
+            return ResponseEntity.notFound().build(); // Return 404
+        }
+        return ResponseEntity.ok(activity);
     }
 }
