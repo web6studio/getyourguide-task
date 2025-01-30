@@ -1,4 +1,4 @@
-package com.getyourguide.demo;
+package com.getyourguide.demo; 
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,7 +53,10 @@ public class JsonDataLoader {
         }
     }
 
-    public List<ActivityWithSupplier> getActivities() {
-        return activities;
+    public List<ActivityWithSupplier> getActivities(int offset, int limit) {
+        // In real life the pagination is completed on the DB side with LIMIT and OFFSET
+        int endIndex = Math.min(offset + limit, activities.size());
+        List<ActivityWithSupplier> paginatedActivities = activities.subList(offset, endIndex);
+        return paginatedActivities;
     }
 }

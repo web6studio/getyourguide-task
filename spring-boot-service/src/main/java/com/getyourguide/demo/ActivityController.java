@@ -19,16 +19,21 @@ public class ActivityController {
     }
 
     @GetMapping("/debug")
-    public void debug(@RequestParam(name = "title", required = false, defaultValue = "NONE") String title, Model model) {
+    public void debug(@RequestParam(name = "title", required = false, defaultValue = "NONE") String title,
+                      @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+                      @RequestParam(name = "limit", required = false, defaultValue = "1000") int limit, 
+                      Model model) {
         // Read activities from jsonDataLoader service
-        List<ActivityWithSupplier> activities = jsonDataLoader.getActivities();
+        List<ActivityWithSupplier> activities = jsonDataLoader.getActivities(offset, limit);
         model.addAttribute("title", title);
         model.addAttribute("activities", activities);
     }
 
     @GetMapping("/activities")
-    public ResponseEntity<List<ActivityWithSupplier>> activities() {
-        // Return activities from jsonDataLoader service
-        return ResponseEntity.ok(jsonDataLoader.getActivities());
+    public ResponseEntity<List<ActivityWithSupplier>> activities(
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+            @RequestParam(name = "limit", required = false, defaultValue = "1000") int limit) {
+        // Return activities using offset and limit
+        return ResponseEntity.ok(jsonDataLoader.getActivities(offset, limit));
     }
 }
