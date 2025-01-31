@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Optional;
 import java.util.List;
 
 @Controller
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ActivityController {
     private final JsonDataLoader jsonDataLoader;
+
+    private static final int DEFAULT_OFFSET = 0;
+    private static final int DEFAULT_LIMIT = 1000;
 
     public ActivityController(JsonDataLoader jsonDataLoader) {
         this.jsonDataLoader = jsonDataLoader;
@@ -21,8 +24,8 @@ public class ActivityController {
 
     @GetMapping("/debug")
     public void debug(@RequestParam(name = "title", required = false, defaultValue = "") String title,
-                      @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
-                      @RequestParam(name = "limit", required = false, defaultValue = "1000") int limit, 
+                      @RequestParam(name = "offset", required = false, defaultValue = DEFAULT_OFFSET + "") int offset,
+                      @RequestParam(name = "limit", required = false, defaultValue = DEFAULT_LIMIT + "") int limit, 
                       Model model) {
         // Read activities with filtering and pagination
         List<ActivityWithSupplier> activities = jsonDataLoader.getActivities(title, offset, limit);
@@ -31,20 +34,16 @@ public class ActivityController {
     }
 
     @GetMapping("/activities")
-    public ResponseEntity<List<ActivityWithSupplier>> activities(
+    public ResponseEntity<List<ActivityWithSupplier>> getActivities(
             @RequestParam(name = "title", required = false, defaultValue = "") String title,
-            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
-            @RequestParam(name = "limit", required = false, defaultValue = "1000") int limit) {
+            @RequestParam(name = "offset", required = false, defaultValue = DEFAULT_OFFSET + "") int offset,
+            @RequestParam(name = "limit", required = false, defaultValue = DEFAULT_LIMIT + "") int limit) {
         // Return filtered and paginated activities
         return ResponseEntity.ok(jsonDataLoader.getActivities(title, offset, limit));
     }
 
     @GetMapping("/activity/{id}")
     public ResponseEntity<ActivityWithSupplier> getActivityById(@PathVariable long id) {
-        ActivityWithSupplier activity = jsonDataLoader.getActivityById(id);
-        if (activity == null) {
-            return ResponseEntity.notFound().build(); // Return 404
-        }
-        return ResponseEntity.ok(activity);
+        return ResponseEntity.of(Optional.ofNullable(jsonDataLoader.getActivityById(id)));
     }
 }
