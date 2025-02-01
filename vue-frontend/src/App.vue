@@ -1,24 +1,21 @@
-<script>
-import Activities from './components/Activities.vue'
-
-export default {
-  name: 'App',
-  components: {
-    Activities
-  },
-}
+<script setup>
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div id="app">
-    <h1>Activities</h1>
-    <Activities :activities="activities" />
+  <div class="app-container">
+    <RouterView />
   </div>
 </template>
 
-<style>
-#app {
-  text-align: center;
-  color: #2c3e50;
+<style scoped>
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
 }
 </style>
