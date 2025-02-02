@@ -1,17 +1,26 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
+// Define props for pagination controls
 const props = defineProps<{
   offset: number;
   limit: number;
   total: number;
 }>();
 
+// Define the events to emit when user navigates pages
+const emit = defineEmits<{
+  (e: 'prev'): void;
+  (e: 'next'): void;
+}>();
 </script>
 
 <template>
   <div class="pagination">
-    <button @click="$emit('prev')" :disabled="props.offset === 0">
+    <button
+      :disabled="props.offset === 0"
+      @click="$emit('prev')"
+    >
       Prev
     </button>
 
@@ -19,7 +28,10 @@ const props = defineProps<{
       {{ props.offset + 1 }} - {{ Math.min(props.offset + props.limit, props.total) }} of {{ props.total }}
     </span>
 
-    <button @click="$emit('next')" :disabled="props.offset + props.limit >= props.total">
+    <button
+      :disabled="props.offset + props.limit >= props.total"
+      @click="$emit('next')"
+    >
       Next
     </button>
   </div>

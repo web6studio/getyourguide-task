@@ -65,7 +65,13 @@ fetchActivities("", 0, DEFAULT_LIMIT);
     />
 
     <!-- Pagination Component -->
-    <PaginationComponent :offset="offset" :limit="limit" :total="total" @prev="prevPage" @next="nextPage" />
+    <PaginationComponent
+      :offset="offset"
+      :limit="limit"
+      :total="total"
+      @prev="prevPage"
+      @next="nextPage"
+    />
   </div>
 </template>
 
