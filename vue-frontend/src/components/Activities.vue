@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "activities-component",
+  name: "ActivitiesComponent",
   data() {
     return {
       activities: [],
@@ -21,7 +21,7 @@ export default {
 
 <template>
   <div class="activities__container">
-    {{activities}}
+    {{ activities }}
   </div>
 </template>
 
@@ -48,6 +48,7 @@ export default {
     border: 1px solid #ccc;
     border-radius: 5px;
     text-align: center;
+    cursor: pointer;
     transition: all 0.3s ease-in-out;
     &:hover {
       border: 1px solid #000;

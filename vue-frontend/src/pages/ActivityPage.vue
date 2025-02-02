@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
+import { computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 
 const store = useStore();
 const route = useRoute();
 const activityId = Number(route.params.id);
 
-const activity = computed(() => store.getters['activities/getSelectedActivity']);
-const isLoading = computed(() => store.getters['activities/isLoading']);
-const error = computed(() => store.getters['activities/error']);
+const activity = computed(() => store.getters["activities/getSelectedActivity"]);
+const isLoading = computed(() => store.getters["activities/isLoading"]);
+const error = computed(() => store.getters["activities/error"]);
 
 onMounted(() => {
   if (!isNaN(activityId)) {
-    store.dispatch('activities/fetchActivity', activityId);
+    store.dispatch("activities/fetchActivity", activityId);
   } else {
-    store.commit('activities/SET_ERROR', 'Invalid activity ID');
+    store.commit("activities/SET_ERROR", "Invalid activity ID");
   }
 });
 </script>

@@ -1,72 +1,88 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
-const store = useStore();
+// Props from parent (HomePage.vue)
+defineProps<{
+  activities: Activity[];
+  loading: boolean;
+  error: string | null;
+}>();
+
 const router = useRouter();
-const activities = computed(() => store.getters['activities/getActivities']);
-const isLoading = computed(() => store.getters['activities/isLoading']);
-const error = computed(() => store.getters['activities/error']);
 
-onMounted(() => {
-  store.dispatch('activities/fetchActivities');
-});
-
+// Routing
 const goToActivityPage = (activityId: number) => {
-  router.push({ name: 'activity', params: { id: activityId } });
+  router.push({ name: "activity", params: { id: activityId } });
 };
 </script>
 
 <template>
   <div class="activities__container">
-    <div v-if="isLoading">
+    <p
+      v-if="loading"
+      class="loading"
+    >
       Loading...
-    </div>
-
-    <div v-if="error">
+    </p>
+    <p
+      v-else-if="error"
+      class="error"
+    >
       Error: {{ error }}
-    </div>
-  
-    <div v-if="!isLoading && !error && activities.length === 0">
+    </p>
+    <p v-else-if="activities?.length === 0">
       No activities found.
-    </div>
-    
-    <div v-else>
-      <div
-        v-for="activity in activities"
-        :key="activity.id"
-        class="activities__activity"
-        @click="goToActivityPage(activity.id)"
-      >
-        <h3>{{ activity.title }}</h3>
-        <p>Price: {{ activity.price }}</p>
-      </div>
+    </p>
+
+    <div
+      v-for="activity in activities"
+      v-else
+      :key="activity.id"
+      class="activities__activity"
+      @click="goToActivityPage(activity.id)"
+    >
+      <h3>{{ activity.title }}</h3>
+      <p>Price: {{ activity.price }} {{ activity.currency }}</p>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* Container styles for the activities list */
 .activities__container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
   justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-/* Styles for each individual activity card */
 .activities__activity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
+  padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 20px;
-  width: 300px;
   text-align: center;
-  transition: box-shadow 0.3s ease;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
 .activities__activity:hover {
+  border-color: #000;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.loading {
+  color: blue;
+}
+
+.error {
+  color: red;
 }
 </style>
