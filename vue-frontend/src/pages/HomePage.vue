@@ -54,22 +54,31 @@ const prevPage = () => {
   }
 };
 
+// Function to reset the search input
+const resetSearch = () => {
+  searchQuery.value = "";
+  fetchActivities();
+};
+
+// Initial data fetch
 fetchActivities();
 </script>
 
 <template>
   <div class="home">
-    <h1 class="title">
-      Activities
-    </h1>
+    <h1 class="title">Activities</h1>
 
-    <!-- Search Input -->
-    <input
-      v-model="searchQuery"
-      type="text"
-      placeholder="Search activities..."
-      class="search-input"
-    >
+    <!-- Search Input with Reset Button -->
+    <div class="search-input-wrapper">
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="Search activities..."
+        class="search-input"
+      />
+      <!-- Reset button appears only when searchQuery is non-empty -->
+      <button v-if="searchQuery" @click="resetSearch" class="reset-button">X</button>
+    </div>
 
     <!-- Activities List -->
     <ActivitiesList
@@ -103,11 +112,33 @@ fetchActivities();
   margin-bottom: 20px;
 }
 
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
 .search-input {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
-  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.reset-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #888;
+}
+
+.reset-button:hover {
+  color: #333;
 }
 
 .pagination {

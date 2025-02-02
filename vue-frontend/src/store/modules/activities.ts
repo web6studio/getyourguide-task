@@ -18,7 +18,6 @@ export const activitiesModule: Module<ActivitiesState, RootState> = {
   state,
   mutations: {
     SET_ACTIVITIES(state, payload: PaginatedResponse<Activity>) {
-      console.log(payload)
       state.activities = payload.data;
       state.total = payload.total;
       state.offset = payload.offset;
@@ -30,7 +29,6 @@ export const activitiesModule: Module<ActivitiesState, RootState> = {
       state.isLoading = false;
     },
     SET_LOADING(state, isLoading: boolean) {
-      console.log("SET_LOADING")
       state.isLoading = isLoading;
     },
     SET_ERROR(state, error: string) {

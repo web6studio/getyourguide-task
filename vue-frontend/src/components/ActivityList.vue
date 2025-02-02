@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import ActivityCard from "@/components/ActivityCard.vue";
 
 // Props from parent (HomePage.vue)
 defineProps<{
@@ -7,13 +7,6 @@ defineProps<{
   loading: boolean;
   error: string | null;
 }>();
-
-const router = useRouter();
-
-// Routing
-const goToActivityPage = (activityId: number) => {
-  router.push({ name: "activity", params: { id: activityId } });
-};
 </script>
 
 <template>
@@ -34,15 +27,11 @@ const goToActivityPage = (activityId: number) => {
       No activities found.
     </p>
 
-    <div
-      v-for="activity in activities"
-      v-else
-      :key="activity.id"
-      class="activities__activity"
-      @click="goToActivityPage(activity.id)"
-    >
-      <h3>{{ activity.title }}</h3>
-      <p>Price: {{ activity.price }} {{ activity.currency }}</p>
+    <div v-else class="activities-list">
+      <ActivityCard 
+        v-for="activity in activities" 
+        :key="activity.id" 
+        :activity="activity" />
     </div>
   </div>
 </template>
