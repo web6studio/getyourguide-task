@@ -80,7 +80,7 @@ public class JsonDataLoader {
     // Filter + pagination
     public PaginatedResponse<ActivityWithSupplier> getFilteredAndPaginatedActivities(String title, int offset, int limit) {
         List<ActivityWithSupplier> filteredActivities = filterActivities(title);
-        if (offset >= filteredActivities.size() || offset < 0 || limit < 0) {
+        if (offset > filteredActivities.size() || offset < 0 || limit < 0) {
             throw new IllegalArgumentException("Invalid parameters: check offset and limit");
         }
         int total = filteredActivities.size();
