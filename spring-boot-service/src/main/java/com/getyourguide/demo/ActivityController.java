@@ -28,22 +28,25 @@ public class ActivityController {
                       @RequestParam(name = "offset", required = false, defaultValue = DEFAULT_OFFSET + "") int offset,
                       @RequestParam(name = "limit", required = false, defaultValue = DEFAULT_LIMIT + "") int limit, 
                       Model model) {
-        // Read activities with filtering and pagination
-        List<ActivityWithSupplier> activities = jsonDataLoader.getActivities(title, offset, limit);
+
+        PaginatedResponse<ActivityWithSupplier> paginatedActivities = jsonDataLoader.getFilteredAndPaginatedActivities(title, offset, limit);
         model.addAttribute("title", title);
-        model.addAttribute("activities", activities);
+        model.addAttribute("activities", paginatedActivities.getData());
+        model.addAttribute("total", paginatedActivities.getTotal());
+        model.addAttribute("offset", offset);
+        model.addAttribute("limit", limit);
     }
 
     @GetMapping("/activities")
-    public ResponseEntity<List<ActivityWithSupplier>> getActivities(
+    public ResponseEntity<PaginatedResponse<ActivityWithSupplier>> getActivities(
             @RequestParam(name = "title", required = false, defaultValue = "") String title,
             @RequestParam(name = "offset", required = false, defaultValue = DEFAULT_OFFSET + "") int offset,
             @RequestParam(name = "limit", required = false, defaultValue = DEFAULT_LIMIT + "") int limit) {
         // Return filtered and paginated activities
-        return ResponseEntity.ok(jsonDataLoader.getActivities(title, offset, limit));
+        return ResponseEntity.ok(jsonDataLoader.getFilteredAndPaginatedActivities(title, offset, limit));
     }
 
-    @GetMapping("/activity/{id}")
+    @GetMapping("/activities/{id}")
     public ResponseEntity<ActivityWithSupplier> getActivityById(@PathVariable long id) {
         return ResponseEntity.of(Optional.ofNullable(jsonDataLoader.getActivityById(id)));
     }

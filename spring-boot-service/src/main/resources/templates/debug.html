@@ -12,7 +12,9 @@
 
 <body>
   <div class="container mt-5">
-    <h2 th:text="'Current title filter: ' + ${title}" />
+    <h2 th:text="'Title: ' + ${title} + ' Offset: ' + ${offset} + ' Limit: ' + ${limit}" class="mb-3" />
+    <p><strong>Total Results:</strong> <span th:text="${total}"></span></p>
+
     <table class="table table-striped">
       <thead>
         <tr>
