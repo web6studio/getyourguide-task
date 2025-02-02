@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import SearchInput from "@/components/SearchInput.vue";
 import ActivitiesList from "@/components/ActivityList.vue";
+import PaginationComponent from "@/components/PaginationComponent.vue";
 import { DEFAULT_LIMIT } from "@/constants";
 
 const store = useStore();
@@ -63,22 +64,8 @@ fetchActivities("", 0, DEFAULT_LIMIT);
       :error="error"
     />
 
-    <!-- Pagination -->
-    <div class="pagination">
-      <button
-        :disabled="offset === 0"
-        @click="prevPage"
-      >
-        Prev
-      </button>
-      <span>{{ offset + 1 }} - {{ Math.min(offset + limit, total) }} of {{ total }}</span>
-      <button
-        :disabled="offset + limit >= total"
-        @click="nextPage"
-      >
-        Next
-      </button>
-    </div>
+    <!-- Pagination Component -->
+    <PaginationComponent :offset="offset" :limit="limit" :total="total" @prev="prevPage" @next="nextPage" />
   </div>
 </template>
 

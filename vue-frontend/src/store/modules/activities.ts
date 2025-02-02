@@ -48,7 +48,6 @@ export const activitiesModule: Module<ActivitiesState, RootState> = {
       if (state.abortController) {
         state.abortController.abort();
       }
-
       const controller = new AbortController();
       commit("SET_ABORT_CONTROLLER", controller);
 
