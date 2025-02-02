@@ -27,11 +27,15 @@ defineProps<{
       No activities found.
     </p>
 
-    <div v-else class="activities-list">
+    <div
+      v-else
+      class="activities-list"
+    >
       <ActivityCard 
         v-for="activity in activities" 
         :key="activity.id" 
-        :activity="activity" />
+        :activity="activity"
+      />
     </div>
   </div>
 </template>

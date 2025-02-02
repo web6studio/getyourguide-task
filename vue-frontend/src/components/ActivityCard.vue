@@ -14,11 +14,19 @@ const goToActivityPage = () => {
 </script>
 
 <template>
-  <div class="activity-card" @click="goToActivityPage">
+  <div
+    class="activity-card"
+    @click="goToActivityPage"
+  >
     <h3>{{ activity.title }}</h3>
     <p>Price: {{ activity.price }} {{ activity.currency }}</p>
     <p>Rating: {{ activity.rating }}</p>
-    <p v-if="activity.specialOffer" class="special-offer">Special Offer Available!</p>
+    <p
+      v-if="activity.specialOffer"
+      class="special-offer"
+    >
+      Special Offer Available!
+    </p>
     <p>Supplier: {{ activity.supplier.name }}</p>
     <p>Location: {{ activity.supplier.city }}, {{ activity.supplier.country }}</p>
   </div>

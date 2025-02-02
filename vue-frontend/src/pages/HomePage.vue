@@ -66,7 +66,9 @@ fetchActivities();
 
 <template>
   <div class="home">
-    <h1 class="title">Activities</h1>
+    <h1 class="title">
+      Activities
+    </h1>
 
     <!-- Search Input with Reset Button -->
     <div class="search-input-wrapper">
@@ -75,9 +77,15 @@ fetchActivities();
         type="text"
         placeholder="Search activities..."
         class="search-input"
-      />
+      >
       <!-- Reset button appears only when searchQuery is non-empty -->
-      <button v-if="searchQuery" @click="resetSearch" class="reset-button">X</button>
+      <button
+        v-if="searchQuery"
+        class="reset-button"
+        @click="resetSearch"
+      >
+        X
+      </button>
     </div>
 
     <!-- Activities List -->
