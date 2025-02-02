@@ -10,6 +10,7 @@ const state: ActivitiesState = {
   selectedActivity: null,
   isLoading: false,
   error: null,
+  abortController: null,
 };
 
 export const activitiesModule: Module<ActivitiesState, RootState> = {
@@ -36,10 +37,23 @@ export const activitiesModule: Module<ActivitiesState, RootState> = {
       state.error = error;
       state.isLoading = false;
     },
+    SET_ABORT_CONTROLLER(state, controller: AbortController | null) {
+      state.abortController = controller;
+    },
   },
   actions: {
     async fetchActivities({ commit }, payload = {}) {
       const { title = "", offset = 0, limit = DEFAULT_LIMIT } = payload;
+
+      // Fix Race Conditions
+      // If the request is still not completed, cancel it.
+      if (state.abortController) {
+        state.abortController.abort();
+      }
+
+      const controller = new AbortController();
+      commit("SET_ABORT_CONTROLLER", controller);
+
       commit("SET_LOADING", true);
       commit("SET_ERROR", null);
       try {

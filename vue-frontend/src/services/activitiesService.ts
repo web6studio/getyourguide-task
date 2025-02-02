@@ -1,10 +1,10 @@
 import { DEFAULT_LIMIT, ACTIVITIES_URL } from "@/constants";
 
-// Fetch activities with optional filtering & pagination
 export async function fetchActivitiesService(
   title: string = "",
   offset: number = 0,
-  limit: number = DEFAULT_LIMIT
+  limit: number = DEFAULT_LIMIT,
+  controller?: AbortController
 ): Promise<Activity[]> {
   const url = new URL(ACTIVITIES_URL);
   if (title) url.searchParams.append("title", title);
@@ -16,7 +16,8 @@ export async function fetchActivitiesService(
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"
-    }
+    },
+    signal: controller?.signal // Connect AbortController to request
   });
 
   if (!response.ok) throw new Error("Failed to fetch activities");

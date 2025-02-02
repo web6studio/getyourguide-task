@@ -3,6 +3,7 @@ import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 
 import { debounce } from "@/utils";
+import { DEFAULT_LIMIT } from "@/constants";
 import ActivitiesList from "@/components/ActivityList.vue";
 
 // Vuex store
@@ -23,8 +24,8 @@ const error = computed(() => store.getters["activities/error"]);
 const fetchActivities = () => {
   store.dispatch("activities/fetchActivities", {
     title: searchQuery.value,
-    offset: offset.value,
-    limit: limit.value,
+    offset: 0, // Reload Pagination on new search
+    limit: DEFAULT_LIMIT,
   });
 };
 

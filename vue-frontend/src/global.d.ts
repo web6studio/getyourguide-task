@@ -24,6 +24,7 @@ declare global {
     selectedActivity: Activity | null;
     isLoading: boolean;
     error: string | null;
+    abortController: AbortController | null
   }
 }
 
