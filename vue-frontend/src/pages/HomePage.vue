@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
-
-import { debounce } from "@/utils";
-import { DEFAULT_LIMIT } from "@/constants";
+import SearchInput from "@/components/SearchInput.vue";
 import ActivitiesList from "@/components/ActivityList.vue";
+import { DEFAULT_LIMIT } from "@/constants";
 
-// Vuex store
 const store = useStore();
-
 // Reactive state for search input
 const searchQuery = ref("");
 
-// Computed properties from Vuex
 const activities = computed(() => store.getters["activities/getActivities"]);
 const total = computed(() => store.getters["activities/total"]);
 const offset = computed(() => store.getters["activities/offset"]);
@@ -21,47 +17,34 @@ const loading = computed(() => store.getters["activities/isLoading"]);
 const error = computed(() => store.getters["activities/error"]);
 
 // Fetch activities from store
-const fetchActivities = () => {
+const fetchActivities = (query: string, offset: number, limit: number) => {
   store.dispatch("activities/fetchActivities", {
-    title: searchQuery.value,
-    offset: 0, // Reload Pagination on new search
-    limit: DEFAULT_LIMIT,
+    title: query,
+    offset,
+    limit,
   });
 };
-
-// Debounce search (300ms delay)
-const debouncedFetch = debounce(fetchActivities, 300);
-watch(searchQuery, debouncedFetch);
 
 // Pagination handlers
 const nextPage = () => {
   if (offset.value + limit.value < total.value) {
-    store.dispatch("activities/fetchActivities", {
-      title: searchQuery.value,
-      offset: offset.value + limit.value,
-      limit: limit.value,
-    });
+    fetchActivities(searchQuery.value, offset.value + limit.value, limit.value);
   }
 };
 
 const prevPage = () => {
   if (offset.value > 0) {
-    store.dispatch("activities/fetchActivities", {
-      title: searchQuery.value,
-      offset: Math.max(offset.value - limit.value, 0),
-      limit: limit.value,
-    });
+    fetchActivities(searchQuery.value, Math.max(offset.value - limit.value, 0), limit.value);
   }
 };
 
-// Function to reset the search input
-const resetSearch = () => {
-  searchQuery.value = "";
-  fetchActivities();
+// When the search is updated, reset pagination and fetch activities
+const onSearchUpdate = (query: string) => {
+  fetchActivities(query, 0, limit.value);
 };
 
 // Initial data fetch
-fetchActivities();
+fetchActivities("", 0, DEFAULT_LIMIT);
 </script>
 
 <template>
@@ -71,22 +54,7 @@ fetchActivities();
     </h1>
 
     <!-- Search Input with Reset Button -->
-    <div class="search-input-wrapper">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search activities..."
-        class="search-input"
-      >
-      <!-- Reset button appears only when searchQuery is non-empty -->
-      <button
-        v-if="searchQuery"
-        class="reset-button"
-        @click="resetSearch"
-      >
-        X
-      </button>
-    </div>
+    <SearchInput @update:search="onSearchUpdate" />
 
     <!-- Activities List -->
     <ActivitiesList
@@ -118,35 +86,6 @@ fetchActivities();
 .title {
   font-size: 2rem;
   margin-bottom: 20px;
-}
-
-.search-input-wrapper {
-  position: relative;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-.reset-button {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  color: #888;
-}
-
-.reset-button:hover {
-  color: #333;
 }
 
 .pagination {
