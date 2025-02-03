@@ -17,10 +17,10 @@ const emit = defineEmits<{
   <div class="flex items-center justify-center space-x-4 mt-8 mb-3">
     <button
       :disabled="props.offset === 0"
-      @click="$emit('prev')"
       class="px-4 py-2 text-white rounded-lg shadow-md transition
              disabled:bg-gray-300 disabled:cursor-not-allowed 
              bg-[#ff542f] hover:bg-[#e04829] active:bg-[#c13d22] cursor-pointer"
+      @click="$emit('prev')"
     >
       Prev
     </button>
@@ -31,10 +31,10 @@ const emit = defineEmits<{
 
     <button
       :disabled="props.offset + props.limit >= props.total"
-      @click="$emit('next')"
       class="px-4 py-2 text-white rounded-lg shadow-md transition
              disabled:bg-gray-300 disabled:cursor-not-allowed 
              bg-[#ff542f] hover:bg-[#e04829] active:bg-[#c13d22] cursor-pointer"
+      @click="$emit('next')"
     >
       Next
     </button>

@@ -16,7 +16,10 @@ defineProps<{
     >
       Error: {{ error }}
     </p>
-    <p v-else-if="activities?.length === 0" class="text-gray-500 text-lg">
+    <p
+      v-else-if="activities?.length === 0"
+      class="text-gray-500 text-lg"
+    >
       No activities found.
     </p>
 

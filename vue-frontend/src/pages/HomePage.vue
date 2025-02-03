@@ -55,14 +55,30 @@ fetchActivities("", 0, DEFAULT_LIMIT);
     </h1>
 
     <!-- Search Input -->
-    <SearchInput @update:search="onSearchUpdate" class="mb-10 w-full max-w-lg" />
+    <SearchInput
+      class="mb-10 w-full max-w-lg"
+      @update:search="onSearchUpdate"
+    />
 
     <!-- Activities List -->
-    <ActivitiesList :activities="activities" :loading="loading" :error="error" />
+    <ActivitiesList
+      :activities="activities"
+      :loading="loading"
+      :error="error"
+    />
 
     <!-- Pagination Component (Hidden if no activities) -->
-    <div v-if="activities.length > 0 && !loading && total > limit" class="mt-6">
-      <PaginationComponent :offset="offset" :limit="limit" :total="total" @prev="prevPage" @next="nextPage" />
+    <div
+      v-if="activities.length > 0 && !loading && total > limit"
+      class="mt-6"
+    >
+      <PaginationComponent
+        :offset="offset"
+        :limit="limit"
+        :total="total"
+        @prev="prevPage"
+        @next="nextPage"
+      />
     </div>
   </div>
 </template>
