@@ -69,7 +69,7 @@ Creativity is also encouraged, and while we do not expect you to add a lot more 
 
 ## Frontend:
 
-1. Create markup (Framework?)
+1. Create markup and styles (Tailwind)  ✔
 2. Add Loader/Skeleton ✔
 3. Add search/filter + Debouncer + check search input for copy/paste func  ✔
 4. Fix Race conditions (Abort/Select last/Cancel Token) ✔
