@@ -77,4 +77,4 @@ Creativity is also encouraged, and while we do not expect you to add a lot more 
 6. Add routing with /activity/{id} route ✔
 7. Refactoring (services, etc...) ✔
 
-## Documentation/Comments
+## Documentation/Comments ✔
