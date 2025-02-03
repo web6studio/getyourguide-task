@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
 
-// Define props for pagination controls
 const props = defineProps<{
   offset: number;
   limit: number;
   total: number;
 }>();
 
-// Define the events to emit when user navigates pages
 const emit = defineEmits<{
   (e: 'prev'): void;
   (e: 'next'): void;
@@ -16,38 +14,29 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="pagination">
+  <div class="flex items-center justify-center space-x-4 mt-8 mb-3">
     <button
       :disabled="props.offset === 0"
       @click="$emit('prev')"
+      class="px-4 py-2 text-white rounded-lg shadow-md transition
+             disabled:bg-gray-300 disabled:cursor-not-allowed 
+             bg-[#ff542f] hover:bg-[#e04829] active:bg-[#c13d22] cursor-pointer"
     >
       Prev
     </button>
 
-    <span>
+    <span class="text-gray-700 font-medium">
       {{ props.offset + 1 }} - {{ Math.min(props.offset + props.limit, props.total) }} of {{ props.total }}
     </span>
 
     <button
       :disabled="props.offset + props.limit >= props.total"
       @click="$emit('next')"
+      class="px-4 py-2 text-white rounded-lg shadow-md transition
+             disabled:bg-gray-300 disabled:cursor-not-allowed 
+             bg-[#ff542f] hover:bg-[#e04829] active:bg-[#c13d22] cursor-pointer"
     >
       Next
     </button>
   </div>
 </template>
-
-<style scoped>
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.pagination button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-</style>

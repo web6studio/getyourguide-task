@@ -1,21 +1,10 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { RouterView } from "vue-router";
+import AppLayout from "@/components/AppLayout.vue";
 </script>
 
 <template>
-  <div class="app-container">
+  <AppLayout>
     <RouterView />
-  </div>
+  </AppLayout>
 </template>
-
-<style scoped>
-.app-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
-}
-</style>

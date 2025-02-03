@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.31.1",
+    "lucide-vue-next": "^0.474.0",
     "vue": "^3.3.4",
     "vue-router": "^4.5.0",
     "vuex": "^4.1.0"

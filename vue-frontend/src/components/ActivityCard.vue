@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import ActivityRating from "@/components/ActivityRating.vue";
 
 const props = defineProps<{
   activity: Activity;
@@ -15,50 +16,29 @@ const goToActivityPage = () => {
 
 <template>
   <div
-    class="activity-card"
     @click="goToActivityPage"
+    class="w-full border border-gray-300 rounded shadow-md hover:shadow-lg cursor-pointer transition-transform transform hover:scale-105 bg-white"
   >
-    <h3>{{ activity.title }}</h3>
-    <p>Price: {{ activity.price }} {{ activity.currency }}</p>
-    <p>Rating: {{ activity.rating }}</p>
-    <p
-      v-if="activity.specialOffer"
-      class="special-offer"
-    >
-      Special Offer Available!
-    </p>
-    <p>Supplier: {{ activity.supplier.name }}</p>
-    <p>Location: {{ activity.supplier.city }}, {{ activity.supplier.country }}</p>
+    <img
+      src="@/assets/dummy-image.webp"
+      alt="Activity Image"
+      class="w-full h-48 object-cover rounded-t"
+    />
+
+    <div class="p-4">
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ activity.title }}</h3>
+
+      <ActivityRating :rating="activity.rating" />
+
+      <div class="text-sm text-gray-600 mb-2">Supplier: {{ activity.supplier.name }}, {{ activity.supplier.city }}, {{ activity.supplier.country }}</div>
+
+      <p v-if="activity.specialOffer" class="text-green-600 font-bold mb-2">
+        Special Offer Available!
+      </p>
+
+      <p class="text-gray-600">
+        <span class="font-semibold">From ${{ activity.price }}</span> per person
+      </p>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.activity-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 300px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.activity-card:hover {
-  border-color: #000;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.special-offer {
-  color: green;
-  font-weight: bold;
-}
-
-.no-offer {
-  color: #555;
-}
-</style>

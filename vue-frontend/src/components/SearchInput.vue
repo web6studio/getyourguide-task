@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref, watch, defineEmits } from "vue";
 import { debounce } from "@/utils";
+import { X, Search } from "lucide-vue-next";
 
-// Define events that this component can emit
 const emit = defineEmits<{
   (e: "update:search", value: string): void;
 }>();
 
-// Local reactive state for the search query
 const searchQuery = ref("");
 
 // Debounce the update event (300ms delay)
@@ -18,58 +17,31 @@ const debouncedEmit = debounce(() => {
 // Watch for changes in the search query and emit the update
 watch(searchQuery, debouncedEmit);
 
-// Function to clear the search input and emit an update
+// Function to clear search input
 const clearSearch = () => {
   searchQuery.value = "";
 };
 </script>
 
 <template>
-  <div class="search-input-wrapper">
-    <input
-      v-model="searchQuery"
-      type="text"
-      placeholder="Search activities..."
-      class="search-input"
-    >
-    <!-- Reset button appears only when searchQuery is non-empty -->
-    <button
-      v-if="searchQuery"
-      class="reset-button"
-      @click="clearSearch"
-    >
-      X
-    </button>
+  <div class="relative w-full max-w-md">
+    <div class="relative flex items-center bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-md transition-all">
+      <Search class="absolute left-3 text-gray-500 w-5 h-5" />
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="Search activities..."
+        class="w-full py-2 pl-10 pr-10 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 rounded-full"
+      >
+
+      <!-- Clear button -->
+      <button
+        v-if="searchQuery"
+        class="absolute right-3 text-gray-500 hover:text-gray-800 cursor-pointer"
+        @click="clearSearch"
+      >
+        <X class="w-5 h-5" />
+      </button>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.search-input-wrapper {
-  position: relative;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-.reset-button {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  color: #888;
-}
-
-.reset-button:hover {
-  color: #333;
-}
-</style>
