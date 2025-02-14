@@ -78,3 +78,22 @@ Creativity is also encouraged, and while we do not expect you to add a lot more 
 7. Refactoring (services, etc...) ✔
 
 ## Documentation/Comments ✔
+
+
+# Run locally:
+BE:
+```
+echo 'export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+./gradlew bootRun
+```
+FE: `yarn server`
+
+TODO more:
+BE:
+1. logging
+2. update error handler
+3. add filters/sorting
+FE:
+1. fix abort controller
+2. add more filters

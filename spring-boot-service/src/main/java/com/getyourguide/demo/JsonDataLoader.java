@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 
 @Service
 public class JsonDataLoader {
@@ -24,7 +26,8 @@ public class JsonDataLoader {
         try {
             // Load suppliers from JSON file
             var suppliersInput = new ClassPathResource("static/suppliers.json").getInputStream();
-            List<Supplier> suppliers = objectMapper.readValue(suppliersInput, new TypeReference<List<Supplier>>() {});
+            List<Supplier> suppliers = objectMapper.readValue(suppliersInput, new TypeReference<List<Supplier>>() {
+            });
 
             // Convert supplier list to a map for quick lookup
             Map<Long, Supplier> supplierMap = suppliers.stream()
@@ -32,7 +35,9 @@ public class JsonDataLoader {
 
             // Load activities from JSON file
             var activitiesInput = new ClassPathResource("static/activities.json").getInputStream();
-            List<Activity> activitiesWithSupplier = objectMapper.readValue(activitiesInput, new TypeReference<List<Activity>>() {});
+            List<Activity> activitiesWithSupplier = objectMapper.readValue(activitiesInput,
+                    new TypeReference<List<Activity>>() {
+                    });
 
             // Convert activities to ActivityWithSupplier, adding supplier details
             activities = activitiesWithSupplier.stream().map(activity -> {
@@ -44,8 +49,7 @@ public class JsonDataLoader {
                         activity.getCurrency(),
                         activity.getRating(),
                         activity.isSpecialOffer(),
-                        supplier
-                );
+                        supplier);
             }).collect(Collectors.toList());
 
         } catch (IOException e) {
@@ -53,12 +57,17 @@ public class JsonDataLoader {
         }
     }
 
-    // Filter activities by title (case-insensitive)
-    public List<ActivityWithSupplier> filterActivities(String title) {
-        // In real life the filter is completed on the DB side with LIKE/ILIKE (PostgreSQL)
+    // Filter activities based on title, price, rating, and special offers
+    public List<ActivityWithSupplier> filterActivities(
+            String title, Integer minPrice, Integer maxPrice, Double minRating, Boolean specialOffer) {
+
         return activities.stream()
-                .filter(activity -> title == null || title.trim().isEmpty() || 
+                .filter(activity -> title == null || title.trim().isEmpty() ||
                         activity.getTitle().toLowerCase().contains(title.trim().toLowerCase()))
+                .filter(activity -> minPrice == null || activity.getPrice() >= minPrice)
+                .filter(activity -> maxPrice == null || activity.getPrice() <= maxPrice)
+                .filter(activity -> minRating == null || activity.getRating() >= minRating)
+                .filter(activity -> specialOffer == null || activity.isSpecialOffer() == specialOffer)
                 .collect(Collectors.toList());
     }
 
@@ -74,17 +83,46 @@ public class JsonDataLoader {
         return activities.stream()
                 .filter(activity -> activity.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("Activity with ID " + id + " not found"));
     }
 
-    // Filter + pagination
-    public PaginatedResponse<ActivityWithSupplier> getFilteredAndPaginatedActivities(String title, int offset, int limit) {
-        List<ActivityWithSupplier> filteredActivities = filterActivities(title);
-        if (offset > filteredActivities.size() || offset < 0 || limit < 0) {
+    public PaginatedResponse<ActivityWithSupplier> getFilteredSortedPaginatedActivities(
+            String title, int offset, int limit, Integer minPrice, Integer maxPrice,
+            Double minRating, Boolean specialOffer, String sortBy, String sortOrder) {
+
+        // Apply all filters first
+        List<ActivityWithSupplier> filteredActivities = filterActivities(title, minPrice, maxPrice, minRating,
+                specialOffer);
+
+        // Sorting logic
+        Comparator<ActivityWithSupplier> comparator;
+        switch (sortBy.toLowerCase()) {
+            case "price":
+                comparator = Comparator.comparing(ActivityWithSupplier::getPrice);
+                break;
+            case "rating":
+                comparator = Comparator.comparing(ActivityWithSupplier::getRating);
+                break;
+            default:
+                comparator = Comparator.comparing(ActivityWithSupplier::getTitle);
+        }
+
+        // Apply sorting order
+        if (sortOrder.equalsIgnoreCase("desc")) {
+            comparator = comparator.reversed();
+        }
+
+        filteredActivities.sort(comparator);
+
+        // Validate pagination parameters
+        if (offset > filteredActivities.size() || offset < 0 || limit < 1) {
             throw new IllegalArgumentException("Invalid parameters: check offset and limit");
         }
+
+        // Apply pagination
         int total = filteredActivities.size();
         List<ActivityWithSupplier> paginatedActivities = paginateActivities(filteredActivities, offset, limit);
+
         return new PaginatedResponse<>(paginatedActivities, total, offset, limit);
     }
 }

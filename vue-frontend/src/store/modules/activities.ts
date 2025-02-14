@@ -41,10 +41,19 @@ export const activitiesModule: Module<ActivitiesState, RootState> = {
   },
   actions: {
     async fetchActivities({ commit }, payload = {}) {
-      const { title = "", offset = 0, limit = DEFAULT_LIMIT } = payload;
+      const {
+        title = "",
+        offset = 0,
+        limit = DEFAULT_LIMIT,
+        minPrice = null,
+        maxPrice = null,
+        minRating = null,
+        specialOffer = null,
+        sortBy = "title",
+        sortOrder = "asc",
+      } = payload;
 
       // Fix Race Conditions
-      // If the request is still not completed, cancel it.
       if (state.abortController) {
         state.abortController.abort();
       }
@@ -54,8 +63,11 @@ export const activitiesModule: Module<ActivitiesState, RootState> = {
       commit("SET_LOADING", true);
       commit("SET_ERROR", null);
       try {
-        const response = await fetchActivitiesService(title, offset, limit);
+        const response = await fetchActivitiesService(
+          title, offset, limit, minPrice, maxPrice, minRating, specialOffer, sortBy, sortOrder, controller
+        );
         commit("SET_ACTIVITIES", response);
+        commit("SET_ERROR", null);
       } catch (error) {
         commit("SET_ERROR", "Error fetching activities");
         console.error("Error fetching activities:", error);
