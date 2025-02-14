@@ -69,10 +69,10 @@ Creativity is also encouraged, and while we do not expect you to add a lot more 
 
 ## Frontend:
 
-1. Create markup and styles (Tailwind)  ✔
+1. Create markup and styles (Tailwind) ✔
 2. Add Loader/Skeleton ✔
-3. Add search/filter + Debouncer + check search input for copy/paste func  ✔
-4. Fix Race conditions (Abort/Select last/Cancel Token) ✔
+3. Add search/filter + Debouncer ✔
+4. Fix Race conditions (Abort) ✔
 5. Add Pagination ✔
 6. Add routing with /activity/{id} route ✔
 7. Refactoring (services, etc...) ✔
